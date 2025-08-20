@@ -1,0 +1,32 @@
+volumes:
+  n8n_storage:
+  # db_storage:
+
+services:
+  # postgres:
+  #   image: postgres:16
+  #   restart: always
+  #   environment:
+  #     - POSTGRES_USER
+  #     - POSTGRES_PASSWORD
+  #     - POSTGRES_DB
+  #     - POSTGRES_NON_ROOT_USER
+  #     - POSTGRES_NON_ROOT_PASSWORD
+  #   volumes:
+  #     - db_storage:/var/lib/postgresql/data
+  #     - ./init-data.sh:/docker-entrypoint-initdb.d/init-data.sh
+  #   healthcheck:
+  #     test: ['CMD-SHELL', 'pg_isready -h localhost -U ${POSTGRES_USER} -d ${POSTGRES_DB}']
+  #     interval: 5s
+  #     timeout: 5s
+  #     retries: 10
+
+  n8n:
+    image: docker.n8n.io/n8nio/n8n
+    restart: always
+    ports:
+      - 5678:5678
+    environment:
+      - N8N_SECURE_COOKIE=false
+    volumes:
+      - n8n_storage:/home/node/.n8n
