@@ -1,0 +1,13 @@
+volumes:
+  n8n_storage:
+
+services:
+  n8n:
+    image: docker.n8n.io/n8nio/n8n
+    restart: always
+    ports:
+      - 5678:5678
+    env_file:
+      - ./.env
+    volumes:
+      - n8n_storage:/home/node/.n8n
