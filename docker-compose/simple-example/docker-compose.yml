@@ -11,3 +11,16 @@ services:
       - ./.env
     volumes:
       - n8n_storage:/home/node/.n8n
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    restart: always
+    ports:
+    - "80:80"
+    - "443:443" # For HTTPS
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro # NGINX configuration
+      - ./nginx/ssl:/etc/nginx/ssl:ro # SSL certificates (if using HTTPS)
+    depends_on:
+      - n8n # Ensure n8n starts before NGINX
