@@ -1,1 +1,4 @@
 .env
+certbot
+nginx/conf.d/default.conf.backup.*
+nginx/conf.d/temp-http.conf
