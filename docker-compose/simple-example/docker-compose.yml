@@ -1,16 +1,23 @@
 volumes:
   n8n_storage:
 
+networks:
+  n8n-network:
+    driver: bridge
+
 services:
   n8n:
     image: docker.n8n.io/n8nio/n8n
+    container_name: n8n
     restart: always
-    ports:
-      - 5678:5678
     env_file:
       - ./.env
     volumes:
       - n8n_storage:/home/node/.n8n
+    networks:
+      - n8n-network
+    expose:
+      - "5678"
 
   nginx:
     image: nginx:latest
@@ -22,5 +29,18 @@ services:
     volumes:
       - ./nginx/conf.d:/etc/nginx/conf.d:ro # NGINX configuration
       - ./nginx/ssl:/etc/nginx/ssl:ro # SSL certificates (if using HTTPS)
+      - ./certbot/conf:/etc/letsencrypt:ro
+      - ./certbot/www:/var/www/certbot
+    networks:
+      - n8n-network
     depends_on:
       - n8n # Ensure n8n starts before NGINX
+
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    networks:
+      - n8n-network

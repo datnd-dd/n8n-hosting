@@ -51,3 +51,44 @@ This project includes a `Makefile` for quick setup and management of the n8n Doc
 - **`make logs`** → Show logs of running services in real time.
 
 **Note**: This setup uses the default **SQLite database** (PostgreSQL is not configured).
+
+Quick Deployment Instructions
+1. Initial Setup
+# Update .env with your email address
+
+```
+# Make scripts executable
+chmod +x scripts/*.sh
+```
+
+2. Deploy
+```
+# Run the deployment script
+./scripts/deploy.sh
+```
+
+3. Manual Steps (if needed)
+```
+# If deploy script fails, run manually:
+./scripts/setup-ssl.sh
+./scripts/install-cronjob.sh
+```
+
+Maintenance Commands
+```
+# View logs
+docker-compose logs -f n8n
+docker-compose logs -f nginx
+
+# Restart services
+docker-compose restart
+
+# Create backup
+./scripts/backup.sh
+
+# Check SSL status
+openssl s_client -connect <your_domain>:443 -servername <your_domain>
+
+# Manual SSL renewal
+./scripts/renew-ssl.sh
+```
